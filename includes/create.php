@@ -2,8 +2,7 @@
   include('db.php');
 
   if(isset($_POST['send'])) {
-    //if isset
-    $name = $_POST['task'];
+    $name = htmlspecialchars($_POST['task']);
 
     $sql = "INSERT INTO task_table (name) VALUES ('$name')";
 

@@ -4,11 +4,11 @@
 
   // Create pagination
   // Check if the page is set.  If not set it to 1 
-  $page = (isset($_GET['page']) ? $_GET['page'] : 1);
+  $page = (isset($_GET['page']) ? (int)$_GET['page'] : 1);
 
   // Check if per page exists in the url query and also check if per-page is equal to less than or equal to 50
   // Otherwise, set per-page to 5
-  $perPage = (isset($_GET['per-page']) && ($_GET['per-page']) <= 50 ? $_GET['per-page'] : 5);
+  $perPage = (isset($_GET['per-page']) && (int)($_GET['per-page']) <= 50 ? (int)$_GET['per-page'] : 5);
 
 
   // Set a limit to how many records to show

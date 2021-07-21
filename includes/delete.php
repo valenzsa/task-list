@@ -1,7 +1,7 @@
 <?php
   include('db.php');
 
-  $id = $_GET['id'];
+  $id = (int)$_GET['id'];
 
   $sql = "DELETE FROM task_table WHERE id='$id'";
 

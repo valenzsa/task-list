@@ -2,7 +2,7 @@
 
 <?php include 'db.php'; 
 
-  $id = $_GET['id'];
+  $id = (int)$_GET['id'];
 
   $sql = "SELECT * FROM task_table WHERE id='$id'";
 
@@ -16,7 +16,8 @@
   echo "<br /><br />";
 
   if(isset($_POST['send'])){
-    $task = $_POST['task'];
+    // htmlspecialchars() prevents any sql injection
+    $task = htmlspecialchars(($_POST['task']));
 
     $sql2 = "UPDATE task_table SET name='$task' WHERE id='$id'";
 
