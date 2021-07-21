@@ -2,8 +2,36 @@
 
 <?php include 'includes/db.php'; 
 
-  $sql = "SELECT * FROM task_table";
+  // Create pagination
+  // Check if the page is set.  If not set it to 1 
+  $page = (isset($_GET['page']) ? $_GET['page'] : 1);
 
+  // Check if per page exists in the url query and also check if per-page is equal to less than or equal to 50
+  // Otherwise, set per-page to 5
+  $perPage = (isset($_GET['per-page']) && ($_GET['per-page']) <= 50 ? $_GET['per-page'] : 5);
+
+
+  // Set a limit to how many records to show
+  $start = ($page > 1) ? ($page * $perPage) - $perPage : 0;
+
+  // Grab all data from task table
+  $sql = "SELECT * FROM task_table LIMIT ".$start.", ".$perPage." ";
+
+  // Check how many records in the database
+ $total = $db->query("SELECT * FROM task_table")->num_rows;
+
+//  echo "<br /><br />";
+//  echo $total;
+//  echo "<br /><br />";
+//  var_dump($total);
+//  echo "<br /><br />";
+
+ $pages = ceil($total / $perPage);
+
+
+
+
+  // Perform a query against the database
   $rows = $db->query($sql);
 ?>
 
@@ -63,7 +91,7 @@
              
             <?php while ($row = $rows->fetch_assoc()): ?>
 
-              <?php var_dump($row); ?>
+              
               <tr>
                 <td><?php echo $row['id']; ?></td> 
                 <td class="col-md-10"><?php echo $row['name']; ?></td> 
@@ -74,6 +102,12 @@
             </tr> 
           </tbody> 
         </table>
+
+        <ul class="pagination">
+          <?php for($i = 1; $i <= $pages; $i++): ?>
+          <li><a href="?page=<?php echo $i; ?>&per-page=<?php echo $perPage; ?>"><?php echo $i; ?></a></li>
+          <?php endfor; ?>
+        </ul>
       </div>
     </div><!-- End of row -->
   </div><!-- End of container -->
