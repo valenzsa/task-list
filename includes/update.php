@@ -54,7 +54,8 @@
               <label>Task Name</label>
               <input type="text" required name="task" class="form-control" value="<?php echo $row['name']; ?>"/>
             </div>
-            <input type="submit" name="send" value="Update Task" class="btn btn-success" />
+            <input type="submit" name="send" value="Update Task" class="btn btn-success" />&nbsp;
+            <a href="../index.php" class="btn btn-warning">Back</a>
           </form>
                 
           

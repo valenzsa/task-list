@@ -1,38 +1,18 @@
 <!DOCTYPE html>
 
-<?php include 'includes/db.php'; 
+<?php include 'db.php'; 
 
-  // Create pagination
-  // Check if the page is set.  If not set it to 1 
-  $page = (isset($_GET['page']) ? (int)$_GET['page'] : 1);
+  if(isset($_POST['search'])){
 
-  // Check if per page exists in the url query and also check if per-page is equal to less than or equal to 50
-  // Otherwise, set per-page to 5
-  $perPage = (isset($_GET['per-page']) && (int)($_GET['per-page']) <= 50 ? (int)$_GET['per-page'] : 5);
+    $name = htmlspecialchars($_POST['search']);
 
+    // Grab all data from task table
+    $sql = "SELECT * FROM task_table WHERE name like '%$name%'";
 
-  // Set a limit to how many records to show
-  $start = ($page > 1) ? ($page * $perPage) - $perPage : 0;
-
-  // Grab all data from task table
-  $sql = "SELECT * FROM task_table LIMIT ".$start.", ".$perPage." ";
-
-  // Check how many records in the database
- $total = $db->query("SELECT * FROM task_table")->num_rows;
-
-//  echo "<br /><br />";
-//  echo $total;
-//  echo "<br /><br />";
-//  var_dump($total);
-//  echo "<br /><br />";
-
- $pages = ceil($total / $perPage);
-
-
-
-
-  // Perform a query against the database
-  $rows = $db->query($sql);
+    // Perform a query against the database
+    $rows = $db->query($sql);
+  }
+  
 ?>
 
 
@@ -58,10 +38,18 @@
         
         <div class="col-md-12 text-center">
           <p>Search</p>
-          <form action="includes/search.php" method="POST" class="form-group">
+          <form action="search.php" method="POST" class="form-group">
             <input type="text" placeholder="Search" class="form-control" name="search" />
           </form>
         </div>
+
+        <?php if(mysqli_num_rows($rows) < 1): ?>
+
+          <!-- IF THERE NO RESULT -->
+          <h2 class="text-center text-danger">Nothing Found</h2>
+          <a href="../index.php" class="btn btn-warning">Back</a>
+
+        <?php else: ?>
 
         <table class="table table-hover"> 
           <div id="addModal" class="modal fade" role="dialog">
@@ -110,12 +98,9 @@
             </tr> 
           </tbody> 
         </table>
+        <?php endif; ?>
+        
 
-        <ul class="pagination">
-          <?php for($i = 1; $i <= $pages; $i++): ?>
-          <li><a href="?page=<?php echo $i; ?>&per-page=<?php echo $perPage; ?>"><?php echo $i; ?></a></li>
-          <?php endfor; ?>
-        </ul>
       </div>
     </div><!-- End of row -->
   </div><!-- End of container -->
