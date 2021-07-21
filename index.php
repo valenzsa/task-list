@@ -1,4 +1,13 @@
 <!DOCTYPE html>
+
+<?php include 'includes/db.php'; 
+
+  $sql = "SELECT * FROM task_table";
+
+  $rows = $db->query($sql);
+?>
+
+
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -29,12 +38,12 @@
                   <h4 class="modal-title">Add Task</h4>
                 </div>
                 <div class="modal-body">
-                  <form>
+                  <form action="includes/create.php" method="POST">
                     <div class="form-group">
                       <label>Task Name</label>
                       <input type="text" required name="task" class="form-control" />
                     </div>
-                    <input type="submit" name="send" value="Send" class="btn btn-success" />
+                    <input type="submit" name="send" value="Add Task" class="btn btn-success" />
                   </form>
                 </div>
                 <div class="modal-footer">
@@ -46,14 +55,22 @@
           </div>
           <thead> 
             <tr> 
-              <th>No.</th> 
+              <th>Id.</th> 
               <th>Task</th> 
             </tr> 
           </thead> 
           <tbody> 
-            <tr> 
-              <td>1</td> 
-              <td>Mark</td> 
+             
+            <?php while ($row = $rows->fetch_assoc()): ?>
+
+              <?php var_dump($row); ?>
+              <tr>
+                <td><?php echo $row['id']; ?></td> 
+                <td class="col-md-10"><?php echo $row['name']; ?></td> 
+                <td><a href="includes/update.php?id=<?php echo $row['id'];?>" class="btn btn-success">Edit</a></td>
+                <td><a href="includes/delete.php?id=<?php echo $row['id'];?>" class="btn btn-danger">Delete</a></td>
+              </tr>
+            <?php endwhile; ?>
             </tr> 
           </tbody> 
         </table>
